@@ -1,4 +1,4 @@
-package com.bptn.Connect4;
+package connect4;
 
 import java.util.Scanner;
 import java.util.Arrays;

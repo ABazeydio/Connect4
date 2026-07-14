@@ -1,4 +1,4 @@
-package com.bptn.Connect4;
+package connect4;
 
 //game testing class 
 public class Main {

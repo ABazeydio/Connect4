@@ -1,4 +1,4 @@
-package com.bptn.Connect4;
+package connect4;
 
 /* 
  * A custom exception for when an invalid move is entered. 
