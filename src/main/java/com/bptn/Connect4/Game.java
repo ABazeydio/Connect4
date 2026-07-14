@@ -10,28 +10,35 @@ public class Game {
 
     public Game() {
         // Let's default it two players for now. Later, you can improve upon this to allow the game creator to choose how many players are involved.
-        this.players = // complete line.
-        this.board = // complete line
+        this.players = new Player[2]; // complete line.
+        this.board = new Board(); // complete line
     }
 
     public void setUpGame() {
         System.out.println("Enter player 1's name: ");
-        players[0] = new Player(scanner.nextLine(), "1");
+        players[0] = new Player(scanner.nextLine(), 1);
         System.out.println("Enter player 2's name: ");
         String playerTwoName = scanner.nextLine();
         /** add logic to prevent a user from giving a second name that's equal to the first. Allow the user to try as long as the names are not different.*/
 
-        /* wrap the code in here with a conditional block that enables the check described above. 
-        
+        /* wrap the code in here with a conditional block that enables the check described above.
+
             System.out.println("Error! Both Players cannot have the same name.");
             System.out.println("Enter player 2's name: ");
             playerTwoName = scanner.nextLine();
-        
+
         */
-        players[1] = new Player(playerTwoName, "2");
+        while (playerTwoName.equals(players[0].getName())) {
+            System.out.println("Error! Both Players cannot have the same name.");
+            System.out.println("Enter player 2's name: ");
+            playerTwoName = scanner.nextLine();
+        }
+        players[1] = new Player(playerTwoName, 2);
 
         // set up the board using the appropriate method
+        board.boardSetUp();
         // print the board the using appropriate method
+        board.printBoard();
     }
 
     public void printWinner(Player player) {
@@ -40,10 +47,13 @@ public class Game {
 
     public void playerTurn(Player currentPlayer) {
         int col = currentPlayer.makeMove();
-        while (!board.addToken(col, currentPlayer.getPlayerNumber())) {
+        while (!board.addToken(col, String.valueOf(currentPlayer.getPlayerNumber()))) {
            // call board method to add token.
+            System.out.println("That column is full. Try a different column.");
+            col = currentPlayer.makeMove();
         }
         // print board
+        board.printBoard();
     }
 
     public void play() {
@@ -52,7 +62,7 @@ public class Game {
         int currentPlayerIndex = 0;
 
         while (noWinner) {
-            if (// provide condition) {
+            if (board.boardFull()) { // provide condition
                 System.out.println("Board is now full. Game Ends.");
                 return;
             }
@@ -61,11 +71,11 @@ public class Game {
             // Override default tostring for Player class
             System.out.println("It is player " + currentPlayer.getPlayerNumber() + "'s turn. " + currentPlayer);
             playerTurn(currentPlayer);
-            if (board.checkIfPlayerIsTheWinner(currentPlayer.getPlayerNumber())) {
+            if (board.checkIfPlayerIsTheWinner(String.valueOf(currentPlayer.getPlayerNumber()))) {
                 printWinner(currentPlayer);
                 noWinner = false;
             } else {
-                currentPlayerIndex = // reassign the variable to allow the game to continue. Note the index would wrap back to the first player if we are at the end. Think of using modulus (%).
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.length; // reassign the variable to allow the game to continue. Note the index would wrap back to the first player if we are at the end. Think of using modulus (%).
             }
         }
     }
