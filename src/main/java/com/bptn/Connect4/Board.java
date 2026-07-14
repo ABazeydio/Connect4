@@ -25,6 +25,11 @@ public class Board {
         this.board = new String [rows][cols];// initialize a row by column array; (Zubair)
 
         // initialize empty board with dashes (-)
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                board[i][j] = "-";
+            }
+        }
         for (String[] row : board) {
         	//(zubair) line 30 - 35
         	for (String col : row) {
@@ -44,10 +49,10 @@ public class Board {
     public boolean columnFull(int col) {
     	
     	// zubair 
-        if (board[0][col] != "-"){// check if the column is full by just checking the 0'th row's value) {
-            return false;
+        if (!board[0][col].equals("-")){// check if the column is full by just checking the 0'th row's value) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     public boolean boardFull() {
@@ -62,6 +67,9 @@ public class Board {
     }
 
     public boolean addToken(int colToAddToken, String token) {
+        if (colToAddToken < 0 || colToAddToken >= board[0].length) {
+            throw new InvalidMoveException("Invalid column index: " + colToAddToken);
+        }
         int rowToAddToken = board.length - 1;
 
         	// what condition should be here to allow you to keep searching for the right row level of the board to place the token? ) {
@@ -80,7 +88,7 @@ public class Board {
             }
         }
 
-        return false;
+        throw new ColumnFullException("Column " + colToAddToken + " is full!");
     }
 
     public boolean checkIfPlayerIsTheWinner(String playerNumber) {
@@ -100,13 +108,13 @@ public class Board {
     }
 
     public boolean checkVertical(String playerNumber) {
-        for (int col = 0; col < board[0].length-3; col++) {
+        for (int col = 0; col < board[0].length; col++) {
             // length - 3 here because we are comparing 4 in a row items
             for (int row = 0; row < board.length - 3; row++) {
                 if (board[row][col].equals(playerNumber)) {
-                    if (board[row][col] == board[row + 1][col]
-                            && board[row][col] == board[row + 2][col]
-                            && board[row][col] == board[row + 3][col]) {
+                    if (board[row][col].equals(board[row + 1][col])
+                            && board[row][col].equals(board[row + 2][col])
+                            && board[row][col].equals(board[row + 3][col])) {
                         return true;
                     }
                 }
@@ -118,8 +126,17 @@ public class Board {
     }
 
     public boolean checkHorizontal(String playerNumber) {
-        for (int col = 0; col < board[0].length - 3; col++) {
-           // try implementing this by being inspired by the checkVertical logic. Note avoid off by 1 errors. Also remember that you are now checking across columns within each row this time. 
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[0].length - 3; col++) {
+               // try implementing this by being inspired by the checkVertical logic. Note avoid off by 1 errors. Also remember that you are now checking across columns within each row this time. 
+               if (board[row][col].equals(playerNumber)) {
+                   if (board[row][col].equals(board[row][col + 1])
+                           && board[row][col].equals(board[row][col + 2])
+                           && board[row][col].equals(board[row][col + 3])) {
+                       return true;
+                   }
+               }
+            }
         }
         return false;
     }
@@ -128,9 +145,9 @@ public class Board {
         for (int row = 0; row < board.length - 3; row++) {
             for (int col = 0; col < board[0].length - 3; col++) {
                 if (board[row][col].equals(playerNumber)) {
-                    if (board[row][col] == board[row + 1][col + 1]
-                            && board[row][col] == board[row + 2][col + 2]
-                            && board[row][col] == board[row + 3][col + 3]) {
+                    if (board[row][col].equals(board[row + 1][col + 1])
+                            && board[row][col].equals(board[row + 2][col + 2])
+                            && board[row][col].equals(board[row + 3][col + 3])) {
                         return true;
                     }
                 }
@@ -143,9 +160,9 @@ public class Board {
     	for (int row = 0; row < board.length - 3; row++) {
 			for (int col = 3; col < board[0].length; col++) {
 				if (board[row][col].equals(playerNumber)) {
-					if (board[row][col] == board[row + 1][col - 1]
-							&& board[row][col] == board[row + 2][col - 2]
-							&& board[row][col] == board[row + 3][col - 3]) {
+					if (board[row][col].equals(board[row + 1][col - 1])
+							&& board[row][col].equals(board[row + 2][col - 2])
+							&& board[row][col].equals(board[row + 3][col - 3])) {
 						return true;
 					}
 				}

@@ -46,11 +46,18 @@ public class Game {
     }
 
     public void playerTurn(Player currentPlayer) {
-        int col = currentPlayer.makeMove();
-        while (!board.addToken(col, String.valueOf(currentPlayer.getPlayerNumber()))) {
-           // call board method to add token.
-            System.out.println("That column is full. Try a different column.");
-            col = currentPlayer.makeMove();
+        boolean moveSuccessful = false;
+        while (!moveSuccessful) {
+            try {
+                int col = currentPlayer.makeMove();
+                // call board method to add token.
+                board.addToken(col, String.valueOf(currentPlayer.getPlayerNumber()));
+                moveSuccessful = true;
+            } catch (InvalidMoveException e) {
+                System.out.println(e.getMessage() + " Try a different column.");
+            } catch (ColumnFullException e) {
+                System.out.println(e.getMessage() + " Try a different column.");
+            }
         }
         // print board
         board.printBoard();
