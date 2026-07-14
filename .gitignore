@@ -14,4 +14,4 @@ target/
 Thumbs.db
 
 # Logs
-*.log
+*.logbin/ 
